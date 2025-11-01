@@ -2,8 +2,9 @@ import { ERROR_MESSAGES_INPUT } from '../constants/index.js';
 
 class InputValidators {
   static validatePurchasePrice(purchasePrice) {
-    InputValidators.#isEmpty(purchasePrice);
-    InputValidators.#isNotNumber(purchasePrice);
+    this.#isEmpty(purchasePrice);
+    this.#isNotNumber(purchasePrice);
+    this.#isDivisible(purchasePrice);
   }
 
   static #isEmpty(purchasePrice) {
@@ -15,6 +16,12 @@ class InputValidators {
   static #isNotNumber(purchasePrice) {
     if (isNaN(purchasePrice)) {
       throw new Error(ERROR_MESSAGES_INPUT.IS_NOT_NUMBER);
+    }
+  }
+
+  static #isDivisible(purchasePrice) {
+    if (purchasePrice % 1000 !== 0) {
+      throw new Error(ERROR_MESSAGES_INPUT.INVALID_NUMBER_DIVIDE);
     }
   }
 }

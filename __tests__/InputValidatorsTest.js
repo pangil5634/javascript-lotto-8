@@ -13,4 +13,7 @@ describe("로또 구입 금액 검증 테스트", () => {
   test("숫자가 아닌 값을 입력한 경우", () => {
     expect(() => InputValidators.validatePurchasePrice("1s")).toThrow(ERROR_MESSAGES_INPUT.IS_NOT_NUMBER);
   });
+    test("1000으로 나눌 수 없는 경우", () => {
+    expect(() => InputValidators.validatePurchasePrice("1500")).toThrow(ERROR_MESSAGES_INPUT.INVALID_NUMBER_DIVIDE);
+  });
 });
