@@ -235,13 +235,12 @@ Model
 - Lotto : 발행한 로또 객체라는 도메인 객체
   - variables
     - #numbers : 로또 번호
-    - #matchCount : 일치된 번호의 개수
   - methods
-    - sortNumbers : 로또 번호 정렬 함수
+    - numbers : 로또 번호에 대한 getter
   
 - LottoMachine : 로또들을 관리하고, 발매 개수, 당첨 계산, 수익률 등을 관리
   - variables
-    - #purchaseAmount : 로또 구입 금액
+    - #purchasePrice : 로또 구입 금액
     - #tickekCount : 구매한 로또 티켓 개수
     - #winningNumbers : 당첨 번호
     - #bonusNumber : 보너스 번호
