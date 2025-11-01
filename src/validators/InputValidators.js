@@ -4,6 +4,7 @@ class InputValidators {
   static validatePurchasePrice(purchasePrice) {
     this.#isEmpty(purchasePrice);
     this.#isNotNumber(purchasePrice);
+    this.#isZero(purchasePrice);
     this.#isDivisible(purchasePrice);
   }
 
@@ -16,6 +17,12 @@ class InputValidators {
   static #isNotNumber(purchasePrice) {
     if (isNaN(purchasePrice)) {
       throw new Error(ERROR_MESSAGES_INPUT.IS_NOT_NUMBER);
+    }
+  }
+
+  static #isZero(purchasePrice) {
+    if (purchasePrice < 1000) {
+      throw new Error(ERROR_MESSAGES_INPUT.INVALID_LEAST_RAGE);
     }
   }
 
