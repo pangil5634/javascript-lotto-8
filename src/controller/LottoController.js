@@ -10,6 +10,8 @@ class LottoController {
     const purchasePrice = await this.readPurchasePrice();
 
     this.#lottoMachine = new LottoMachine(purchasePrice);
+
+    this.#printTicketsInfo();
   }
 
   async readPurchasePrice() {
@@ -21,6 +23,21 @@ class LottoController {
       OutputView.printErrorMessage(error.message);
       return await this.readPurchasePrice();
     }
+  }
+
+  #printTicketsInfo() {
+    this.#printTicketCount();
+    this.#printTicketsNumbers();
+  }
+
+  #printTicketCount() {
+    const ticketCount = this.#lottoMachine.ticketCount;
+    OutputView.printTicketCount(ticketCount);
+  }
+
+  #printTicketsNumbers() {
+    const tickets = this.#lottoMachine.tickets;
+    OutputView.printTicketsNumbers(tickets);
   }
 }
 

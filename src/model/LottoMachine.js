@@ -42,6 +42,14 @@ class LottoMachine {
   #sortNumbers(numbers) {
     return numbers.sort((a, b) => a - b);
   }
+
+  get ticketCount() {
+    return this.#ticketCount;
+  }
+
+  get tickets() {
+    return [...this.#tickets];
+  }
 }
 
 export default LottoMachine;
