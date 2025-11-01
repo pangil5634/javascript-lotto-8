@@ -1,10 +1,15 @@
+import LottoMachine from '../model/LottoMachine.js';
 import InputValidators from '../validators/InputValidators.js';
 import InputView from '../view/InputView.js';
 import OutputView from '../view/OutputView.js';
 
 class LottoController {
+  #lottoMachine;
+
   async run() {
     const purchasePrice = await this.readPurchasePrice();
+
+    this.#lottoMachine = new LottoMachine(purchasePrice);
   }
 
   async readPurchasePrice() {
