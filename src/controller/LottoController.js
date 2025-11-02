@@ -1,8 +1,10 @@
 import LottoMachine from '../model/LottoMachine.js';
-import InputValidators from '../validators/InputValidators.js';
+import {
+  PurchasePriceValidators,
+  WinningNumbersValidators,
+} from '../validators/index.js';
 import InputView from '../view/InputView.js';
 import OutputView from '../view/OutputView.js';
-
 class LottoController {
   #lottoMachine;
 
@@ -19,7 +21,7 @@ class LottoController {
   async readPurchasePrice() {
     try {
       const purchasePrice = await InputView.readPurchasePrice();
-      InputValidators.validatePurchasePrice(purchasePrice);
+      PurchasePriceValidators.validatePurchasePrice(purchasePrice);
       return purchasePrice;
     } catch (error) {
       OutputView.printErrorMessage(error.message);
@@ -46,6 +48,7 @@ class LottoController {
   async readWinningNumbers() {
     try {
       const winningNumbers = await InputView.readWinningNumbers();
+      WinningNumbersValidators.validateWinningNumbers(winningNumbers);
       return winningNumbers;
     } catch (error) {
       OutputView.printErrorMessage(error.message);

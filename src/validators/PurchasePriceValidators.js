@@ -1,6 +1,6 @@
 import { ERROR_MESSAGES_INPUT } from '../constants/index.js';
 
-class InputValidators {
+class PurchasePriceValidators {
   static validatePurchasePrice(purchasePrice) {
     this.#isEmpty(purchasePrice);
     this.#isNotNumber(purchasePrice);
@@ -33,4 +33,4 @@ class InputValidators {
   }
 }
 
-export default InputValidators;
+export default PurchasePriceValidators;
