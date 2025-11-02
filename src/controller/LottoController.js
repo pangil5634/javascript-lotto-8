@@ -26,7 +26,7 @@ class LottoController {
       return purchasePrice;
     } catch (error) {
       OutputView.printErrorMessage(error.message);
-      return await this.readPurchasePrice();
+      return await this.#readAndValidatePurchasePrice();
     }
   }
 
@@ -59,7 +59,7 @@ class LottoController {
       return winningNumbers;
     } catch (error) {
       OutputView.printErrorMessage(error.message);
-      return await this.readWinningNumbers();
+      return await this.#readAndValidateWinningNumbers();
     }
   }
 
