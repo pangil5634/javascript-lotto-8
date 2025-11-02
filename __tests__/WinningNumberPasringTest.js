@@ -66,3 +66,64 @@ describe("당첨 번호 입력 검증 테스트 - 에러 (캐스팅 전)", () =>
   });
 
 });
+
+describe("당첨 번호 입력 검증 테스트 - 에러 (캐스팅 후)", () => {
+  test('1~45 범위 이외의 숫자가 존재하는 경우', () => {
+    const machine = new LottoController();
+    const input = '1, 2, 3, 4, 5, 100';
+    const parseWinningNumbers = ParseWinningNumber.parseWinningNumbers(input);
+    const winningNumbers = parseWinningNumbers.map(Number);
+
+    expect(() => {
+      WinningNumbersValidators.validateParsedWinningNumbers(winningNumbers);
+    }).toThrow(ERROR_MESSAGES_INPUT.INVALID_NUMBER_RANGE);
+  });
+
+  test('중복되는 숫자가 존재하는 경우', () => {
+    const machine = new LottoController();
+    const input = '1, 2, 3, 4, 5, 5';
+    const parseWinningNumbers = ParseWinningNumber.parseWinningNumbers(input);
+    const winningNumbers = parseWinningNumbers.map(Number);
+
+    expect(() => {
+      WinningNumbersValidators.validateParsedWinningNumbers(winningNumbers);
+    }).toThrow(ERROR_MESSAGES_INPUT.EXIST_DUPLICATE_NUMBERS);
+  });
+});
+
+
+
+describe("당첨 번호 입력 검증 테스트 - 정상", () => {
+  test('공백 있는 경우', () => {
+    const machine = new LottoController();
+    const input = '1, 2, 3, 4, 5, 6';
+    const parseWinningNumbers = ParseWinningNumber.parseWinningNumbers(input);
+    WinningNumbersValidators.validateWinningNumbersFormat(parseWinningNumbers);
+    const winningNumbers = parseWinningNumbers.map(Number);
+    WinningNumbersValidators.validateParsedWinningNumbers(winningNumbers);
+
+    expect(winningNumbers).toEqual([1, 2, 3, 4, 5, 6]);
+  });
+
+  test('공백 없는 경우', () => {
+    const machine = new LottoController();
+    const input = '1,2,3,4,5,6';
+    const parseWinningNumbers = ParseWinningNumber.parseWinningNumbers(input);
+    WinningNumbersValidators.validateWinningNumbersFormat(parseWinningNumbers);
+    const winningNumbers = parseWinningNumbers.map(Number);
+    WinningNumbersValidators.validateParsedWinningNumbers(winningNumbers);
+
+    expect(winningNumbers).toEqual([1, 2, 3, 4, 5, 6]);
+  });
+
+  test('공백이 많은 경우', () => {
+    const machine = new LottoController();
+    const input = '    1  , 2 , 3   , 4   , 5    , 6    ';
+    const parseWinningNumbers = ParseWinningNumber.parseWinningNumbers(input);
+    WinningNumbersValidators.validateWinningNumbersFormat(parseWinningNumbers);
+    const winningNumbers = parseWinningNumbers.map(Number);
+    WinningNumbersValidators.validateParsedWinningNumbers(winningNumbers);
+
+    expect(winningNumbers).toEqual([1, 2, 3, 4, 5, 6]);
+  });
+});

@@ -51,6 +51,9 @@ class LottoController {
       const winningNumbersString = await InputView.readWinningNumbers();
 
       const parseWinningNumbers = this.#parseAndValidate(winningNumbersString);
+
+      const winningNumbers = this.#castingAndValidate(parseWinningNumbers);
+      return winningNumbers;
     } catch (error) {
       OutputView.printErrorMessage(error.message);
       return await this.readWinningNumbers();
@@ -64,6 +67,14 @@ class LottoController {
     WinningNumbersValidators.validateWinningNumbersFormat(parseWinningNumbers);
 
     return parseWinningNumbers;
+  }
+
+  #castingAndValidate(parseWinningNumbers) {
+    const winningNumbers = parseWinningNumbers.map(Number);
+
+    WinningNumbersValidators.validateParsedWinningNumbers(winningNumbers);
+
+    return winningNumbers;
   }
 }
 

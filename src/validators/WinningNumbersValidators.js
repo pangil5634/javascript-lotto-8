@@ -22,6 +22,23 @@ class WinningNumbersValidators {
     const hasNonNumber = parseWinningNumbers.some((num) => isNaN(Number(num)));
     if (hasNonNumber) throw new Error(ERROR_MESSAGES_INPUT.INCLUDE_STRING);
   }
+
+  static validateParsedWinningNumbers(winningNumbers) {
+    this.#isInvalidRange(winningNumbers);
+    this.#isDuplicateNumbers(winningNumbers);
+  }
+
+  static #isInvalidRange(winningNumbers) {
+    const hasInvalidRange = winningNumbers.some((num) => num > 45 || num < 1);
+    if (hasInvalidRange)
+      throw new Error(ERROR_MESSAGES_INPUT.INVALID_NUMBER_RANGE);
+  }
+
+  static #isDuplicateNumbers(winningNumbers) {
+    const setWinningNumbers = new Set(winningNumbers);
+    if (winningNumbers.length !== setWinningNumbers.size)
+      throw new Error(ERROR_MESSAGES_INPUT.EXIST_DUPLICATE_NUMBERS);
+  }
 }
 
 export default WinningNumbersValidators;
