@@ -17,6 +17,8 @@ class LottoController {
     this.#printTicketsInfo();
 
     const winningNumbers = await this.#readAndValidateWinningNumbers();
+
+    const bonusNumber = await this.#readAndValidateBonusNumber();
   }
 
   async #readAndValidatePurchasePrice() {
@@ -78,6 +80,20 @@ class LottoController {
     WinningNumbersValidators.validateParsedWinningNumbers(winningNumbers);
 
     return winningNumbers;
+  }
+
+  async #readAndValidateBonusNumber() {
+    try {
+      const bonusNumber = await InputView.readBonusNumber();
+
+      // todo : validate
+
+      // todo : save
+      return bonusNumber;
+    } catch (error) {
+      OutputView.printErrorMessage(error.message);
+      return await this.#readAndValidateBonusNumber();
+    }
   }
 }
 
