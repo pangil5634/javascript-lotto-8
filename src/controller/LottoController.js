@@ -88,7 +88,7 @@ class LottoController {
 
       // todo : validate
 
-      // todo : save
+      this.#lottoMachine.applyBonusNumber(bonusNumber);
       return bonusNumber;
     } catch (error) {
       OutputView.printErrorMessage(error.message);

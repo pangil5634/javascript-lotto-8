@@ -60,6 +60,14 @@ class LottoMachine {
   applyWinningNumbers(winningNumbers) {
     this.#winningNumbers = [...winningNumbers];
   }
+
+  get bonusNumber() {
+    return this.#bonusNumber;
+  }
+
+  applyBonusNumber(bonusNumber) {
+    this.#bonusNumber = bonusNumber;
+  }
 }
 
 export default LottoMachine;
