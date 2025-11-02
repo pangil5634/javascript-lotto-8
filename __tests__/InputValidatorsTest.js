@@ -7,7 +7,7 @@ describe("로또 구입 금액 검증 테스트", () => {
   });
 
   test("값을 입력하지 않은 경우", () => {
-    expect(() => InputValidators.validatePurchasePrice("")).toThrow(ERROR_MESSAGES_INPUT.EMPTY_PURCHASE_PRICE);
+    expect(() => InputValidators.validatePurchasePrice("")).toThrow(ERROR_MESSAGES_INPUT.IS_EMPTY);
   });
 
   test("숫자가 아닌 값을 입력한 경우", () => {

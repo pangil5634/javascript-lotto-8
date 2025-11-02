@@ -10,7 +10,7 @@ class PurchasePriceValidators {
 
   static #isEmpty(purchasePrice) {
     if (purchasePrice === '') {
-      throw new Error(ERROR_MESSAGES_INPUT.EMPTY_PURCHASE_PRICE);
+      throw new Error(ERROR_MESSAGES_INPUT.IS_EMPTY);
     }
   }
 

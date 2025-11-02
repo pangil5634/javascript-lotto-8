@@ -1,6 +1,7 @@
 import LottoMachine from '../model/LottoMachine.js';
 import ParseWinningNumber from '../utils/parseWinningNumber.js';
 import {
+  BonusNumberValidators,
   PurchasePriceValidators,
   WinningNumbersValidators,
 } from '../validators/index.js';
@@ -16,9 +17,9 @@ class LottoController {
 
     this.#printTicketsInfo();
 
-    const winningNumbers = await this.#readAndValidateWinningNumbers();
+    await this.#readAndValidateWinningNumbers();
 
-    const bonusNumber = await this.#readAndValidateBonusNumber();
+    await this.#readAndValidateBonusNumber();
   }
 
   async #readAndValidatePurchasePrice() {
@@ -35,6 +36,7 @@ class LottoController {
   #printTicketsInfo() {
     this.#printTicketCount();
     this.#printTicketsNumbers();
+    OutputView.changeLine();
   }
 
   #printTicketCount() {
@@ -45,7 +47,6 @@ class LottoController {
   #printTicketsNumbers() {
     const tickets = this.#lottoMachine.tickets;
     OutputView.printTicketsNumbers(tickets);
-    OutputView.changeLine();
   }
 
   async #readAndValidateWinningNumbers() {
@@ -57,8 +58,7 @@ class LottoController {
       const winningNumbers = this.#castingAndValidate(parseWinningNumbers);
 
       this.#lottoMachine.applyWinningNumbers(winningNumbers);
-
-      return winningNumbers;
+      OutputView.changeLine();
     } catch (error) {
       OutputView.printErrorMessage(error.message);
       return await this.#readAndValidateWinningNumbers();
@@ -78,18 +78,15 @@ class LottoController {
     const winningNumbers = parseWinningNumbers.map(Number);
 
     WinningNumbersValidators.validateParsedWinningNumbers(winningNumbers);
-
     return winningNumbers;
   }
 
   async #readAndValidateBonusNumber() {
     try {
       const bonusNumber = await InputView.readBonusNumber();
-
-      // todo : validate
-
+      BonusNumberValidators.run(bonusNumber);
       this.#lottoMachine.applyBonusNumber(bonusNumber);
-      return bonusNumber;
+      OutputView.changeLine();
     } catch (error) {
       OutputView.printErrorMessage(error.message);
       return await this.#readAndValidateBonusNumber();
