@@ -47,13 +47,20 @@ class LottoController {
 
   async readWinningNumbers() {
     try {
-      const winningNumbers = await InputView.readWinningNumbers();
+      const winningNumbersString = await InputView.readWinningNumbers();
+      const winningNumbers = this.parseWinningNumbers(winningNumbersString);
       WinningNumbersValidators.validateWinningNumbers(winningNumbers);
       return winningNumbers;
     } catch (error) {
       OutputView.printErrorMessage(error.message);
       return await this.readWinningNumbers();
     }
+  }
+
+  parseWinningNumbers(winningNumbersString) {
+    if (!winningNumbersString) return [];
+
+    return winningNumbersString.split(',').map((num) => Number(num.trim()));
   }
 }
 
