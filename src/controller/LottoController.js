@@ -1,4 +1,5 @@
 import LottoMachine from '../model/LottoMachine.js';
+import ParseWinningNumber from '../utils/parseWinningNumber.js';
 import {
   PurchasePriceValidators,
   WinningNumbersValidators,
@@ -9,16 +10,16 @@ class LottoController {
   #lottoMachine;
 
   async run() {
-    const purchasePrice = await this.readPurchasePrice();
+    const purchasePrice = await this.#readAndValidatePurchasePrice();
 
     this.#lottoMachine = new LottoMachine(purchasePrice);
 
     this.#printTicketsInfo();
 
-    const winningNumbers = await this.readWinningNumbers();
+    const winningNumbers = await this.#readAndValidateWinningNumbers();
   }
 
-  async readPurchasePrice() {
+  async #readAndValidatePurchasePrice() {
     try {
       const purchasePrice = await InputView.readPurchasePrice();
       PurchasePriceValidators.validatePurchasePrice(purchasePrice);
@@ -45,22 +46,24 @@ class LottoController {
     OutputView.changeLine();
   }
 
-  async readWinningNumbers() {
+  async #readAndValidateWinningNumbers() {
     try {
       const winningNumbersString = await InputView.readWinningNumbers();
-      const winningNumbers = this.parseWinningNumbers(winningNumbersString);
-      WinningNumbersValidators.validateWinningNumbers(winningNumbers);
-      return winningNumbers;
+
+      const parseWinningNumbers = this.#parseAndValidate(winningNumbersString);
     } catch (error) {
       OutputView.printErrorMessage(error.message);
       return await this.readWinningNumbers();
     }
   }
 
-  parseWinningNumbers(winningNumbersString) {
-    if (!winningNumbersString) return [];
+  #parseAndValidate(winningNumbersString) {
+    const parseWinningNumbers =
+      ParseWinningNumber.parseWinningNumbers(winningNumbersString);
 
-    return winningNumbersString.split(',').map((num) => Number(num.trim()));
+    WinningNumbersValidators.validateWinningNumbersFormat(parseWinningNumbers);
+
+    return parseWinningNumbers;
   }
 }
 

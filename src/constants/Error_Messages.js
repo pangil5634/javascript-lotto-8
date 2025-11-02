@@ -6,5 +6,7 @@ export const ERROR_MESSAGES_INPUT = {
   INVALID_LEAST_RAGE: `${ERROR_PREFIX} The input sholud be higher than 1,000`,
   INVALID_NUMBER_DIVIDE: `${ERROR_PREFIX} The input should divide by 1,000`,
 
-  EMPTY_WINNING_NUMBERS: `${ERROR_PREFIX} The Winning Numbers is empty`,
+  LESS_WINNING_NUMBERS: `${ERROR_PREFIX} The Winning Numbers should be numbers of six `,
+  INVALID_USING_COMMA: `${ERROR_PREFIX} The Comma should exit between number and number `,
+  INCLUDE_STRING: `${ERROR_PREFIX} The Winning Numbers should include only numbers`,
 };
