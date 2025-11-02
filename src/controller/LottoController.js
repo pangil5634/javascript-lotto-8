@@ -12,6 +12,8 @@ class LottoController {
     this.#lottoMachine = new LottoMachine(purchasePrice);
 
     this.#printTicketsInfo();
+
+    const winningNumbers = await this.readWinningNumbers();
   }
 
   async readPurchasePrice() {
@@ -38,6 +40,17 @@ class LottoController {
   #printTicketsNumbers() {
     const tickets = this.#lottoMachine.tickets;
     OutputView.printTicketsNumbers(tickets);
+    OutputView.changeLine();
+  }
+
+  async readWinningNumbers() {
+    try {
+      const winningNumbers = await InputView.readWinningNumbers();
+      return winningNumbers;
+    } catch (error) {
+      OutputView.printErrorMessage(error.message);
+      return await this.readWinningNumbers();
+    }
   }
 }
 
