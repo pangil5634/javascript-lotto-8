@@ -53,6 +53,9 @@ class LottoController {
       const parseWinningNumbers = this.#parseAndValidate(winningNumbersString);
 
       const winningNumbers = this.#castingAndValidate(parseWinningNumbers);
+
+      this.#lottoMachine.applyWinningNumbers(winningNumbers);
+
       return winningNumbers;
     } catch (error) {
       OutputView.printErrorMessage(error.message);

@@ -58,3 +58,24 @@ describe('LottoMachine', () => {
     expect(machine.tickets.length).toBe(2); 
   });
 });
+
+describe('applyWinningNumbers', () => {
+  test('검증된 winningNumbers를 LottoMachine 내부에 저장한다.', () => {
+    const machine = new LottoMachine(3000);
+    const validatedWinningNumbers = [1, 2, 3, 4, 5, 6];
+
+    machine.applyWinningNumbers(validatedWinningNumbers);
+
+    expect(machine.winningNumbers).toEqual(validatedWinningNumbers);
+  });
+
+  test('winningNumbers는 깊은 복사로 저장되어 외부 배열 변경에 영향을 받지 않는다.', () => {
+    const machine = new LottoMachine(1000);
+    const validatedWinningNumbers = [1, 2, 3, 4, 5, 6];
+
+    machine.applyWinningNumbers(validatedWinningNumbers);
+    validatedWinningNumbers[0] = 99; // 외부 배열 조작
+
+    expect(machine.winningNumbers).toEqual([1, 2, 3, 4, 5, 6]);
+  });
+});

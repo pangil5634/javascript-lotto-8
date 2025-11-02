@@ -12,6 +12,8 @@ class LottoMachine {
   #purchasePrice;
   #ticketCount;
   #tickets = [];
+  #winningNumbers = [];
+  #bonusNumber;
 
   constructor(purchasePrice) {
     this.#purchasePrice = purchasePrice;
@@ -49,6 +51,14 @@ class LottoMachine {
 
   get tickets() {
     return [...this.#tickets];
+  }
+
+  get winningNumbers() {
+    return [...this.#winningNumbers];
+  }
+
+  applyWinningNumbers(winningNumbers) {
+    this.#winningNumbers = [...winningNumbers];
   }
 }
 
