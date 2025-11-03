@@ -4,7 +4,7 @@ class ResultService {
   printResult(lottoMachine) {
     OutputView.printResultHeader();
 
-    lottoMachine.getAllMatchCounts();
+    lottoMachine.makeAllMatchCounts();
     const matchCountList = lottoMachine.getDetailMatchResult();
     OutputView.printDetailMatchResult(matchCountList);
 

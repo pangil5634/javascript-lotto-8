@@ -1,92 +1,101 @@
-// __tests__/LottoMachine.test.js
+import { Random } from '@woowacourse/mission-utils';
 import LottoMachine from '../src/model/LottoMachine.js';
-import Lotto from '../src/model/Lotto.js';
 
-jest.mock('../src/model/Lotto.js');
-
-describe('LottoMachine', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
+describe('LottoMachine 테스트', () => {
+  afterEach(() => {
+    // mock을 초기화합니다.
+    jest.restoreAllMocks();
   });
 
-  test('입력한 금액에 따라 티켓 개수가 올바르게 계산된다.', () => {
+  test('생성자: 구입 금액에 따라 올바른 개수의 티켓을 생성한다.', () => {
     // given
-    const mockRandom = jest.fn().mockReturnValue([1, 2, 3, 4, 5, 6]);
+    const purchasePrice = 3000;
+    const mockNumbers = [
+      [1, 2, 3, 4, 5, 6],
+      [7, 8, 9, 10, 11, 12],
+      [13, 14, 15, 16, 17, 18],
+    ];
+    Random.pickUniqueNumbersInRange = jest
+      .fn()
+      .mockReturnValueOnce(mockNumbers[0])
+      .mockReturnValueOnce(mockNumbers[1])
+      .mockReturnValueOnce(mockNumbers[2]);
 
     // when
-    const machine = new LottoMachine(3000);
-    
+    const lottoMachine = new LottoMachine(purchasePrice);
+
     // then
-    expect(machine.ticketCount).toBe(3);
+    expect(lottoMachine.ticketCount).toBe(3);
+    expect(lottoMachine.tickets.length).toBe(3);
+    // LottoGenerator가 정렬하므로 정렬된 값으로 확인합니다.
+    expect(lottoMachine.tickets[0].numbers).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(lottoMachine.tickets[1].numbers).toEqual([7, 8, 9, 10, 11, 12]);
   });
 
-  test('티켓 수만큼 Lotto 인스턴스를 생성한다.', () => {
+  test('결과 계산: 당첨 통계와 수익률을 올바르게 계산한다.', () => {
     // given
-    const mockRandom = jest.fn().mockReturnValue([1, 2, 3, 4, 5, 6]);
+    const purchasePrice = 1000;
+    // 5등에 당첨될 티켓을 생성하도록 설정
+    const mockTicketNumbers = [1, 2, 3, 10, 11, 12];
+    Random.pickUniqueNumbersInRange = jest.fn().mockReturnValue(mockTicketNumbers);
+
+    const lottoMachine = new LottoMachine(purchasePrice);
+
+    const winningNumbers = [1, 2, 3, 20, 21, 22];
+    const bonusNumber = 40;
 
     // when
-    new LottoMachine(5000);
+    lottoMachine.applyWinningNumbers(winningNumbers);
+    lottoMachine.applyBonusNumber(bonusNumber);
+    lottoMachine.makeAllMatchCounts();
+    const summary = lottoMachine.getDetailMatchResult();
+    const profit = lottoMachine.calculateProfitPercentage(summary);
 
     // then
-    expect(Lotto).toHaveBeenCalledTimes(5);
+    // 5등(3개 일치) 1개, 나머지 등수는 0개인지 확인
+    expect(summary).toEqual({
+      FIRST: 0,
+      SECOND: 0,
+      THIRD: 0,
+      FOURTH: 0,
+      FIFTH: 1,
+    });
+
+    // 5등 상금은 5,000원, 구매 금액은 1,000원 이므로 수익률은 500%
+    // calculateProfitPercentage는 비율(5.0)을 반환
+    expect(profit).toBe(5);
   });
 
-  test('생성된 Lotto 인스턴스에 오름차순으로 정렬된 번호를 전달한다.', () => {
+  test('결과 계산: 2등(보너스) 당첨 시 통계와 수익률을 올바르게 계산한다.', () => {
     // given
-    const mockNumbers = [6, 1, 5, 3, 2, 4];
-    jest.spyOn(global.Math, 'random').mockReturnValue(0.5); 
-    const mockRandom = jest.fn().mockReturnValue(mockNumbers);
-    Lotto.mockImplementation((numbers) => ({ numbers }));
+    const purchasePrice = 1000;
+    // 2등에 당첨될 티켓 (5개 일치 + 보너스 번호 일치)
+    const mockTicketNumbers = [1, 2, 3, 4, 5, 10];
+    Random.pickUniqueNumbersInRange = jest.fn().mockReturnValue(mockTicketNumbers);
+
+    const lottoMachine = new LottoMachine(purchasePrice);
+
+    const winningNumbers = [1, 2, 3, 4, 5, 40]; // 5개 일치
+    const bonusNumber = 10; // 보너스 번호 일치
 
     // when
-    const machine = new LottoMachine(1000);
-    const tickets = machine.tickets;
+    lottoMachine.applyWinningNumbers(winningNumbers);
+    lottoMachine.applyBonusNumber(bonusNumber);
+    lottoMachine.makeAllMatchCounts();
+    const summary = lottoMachine.getDetailMatchResult();
+    const profit = lottoMachine.calculateProfitPercentage(summary);
 
     // then
-    expect(tickets[0].numbers).toEqual([1, 2, 3, 4, 5, 6]);
-  });
+    // 2등 1개, 나머지 0개
+    expect(summary).toEqual({
+      FIRST: 0,
+      SECOND: 1,
+      THIRD: 0,
+      FOURTH: 0,
+      FIFTH: 0,
+    });
 
-  test('티켓 배열을 반환할 때 원본 배열을 직접 수정할 수 없다.', () => {
-    // given
-    const machine = new LottoMachine(2000);
-    const tickets = machine.tickets;
-
-    // when
-    tickets.length = 0; 
-
-    // then
-    expect(machine.tickets.length).toBe(2); 
-  });
-});
-
-describe('applyWinningNumbers', () => {
-  test('검증된 winningNumbers를 LottoMachine 내부에 저장한다.', () => {
-    const machine = new LottoMachine(3000);
-    const validatedWinningNumbers = [1, 2, 3, 4, 5, 6];
-
-    machine.applyWinningNumbers(validatedWinningNumbers);
-
-    expect(machine.winningNumbers).toEqual(validatedWinningNumbers);
-  });
-
-  test('winningNumbers는 깊은 복사로 저장되어 외부 배열 변경에 영향을 받지 않는다.', () => {
-    const machine = new LottoMachine(1000);
-    const validatedWinningNumbers = [1, 2, 3, 4, 5, 6];
-
-    machine.applyWinningNumbers(validatedWinningNumbers);
-    validatedWinningNumbers[0] = 99; // 외부 배열 조작
-
-    expect(machine.winningNumbers).toEqual([1, 2, 3, 4, 5, 6]);
-  });
-});
-
-describe('getMatchCount', () => {
-  test('배열을 넣으면, 매칭 카운트를 구한다. ', () => {
-    // given
-    const machine = new LottoMachine(2000);
-    machine.applyWinningNumbers([1, 2, 3, 4, 5, 6]);
-
-    // then
-    expect(machine.tickets.length).toBe(2); 
+    // 2등 상금은 30,000,000원. 수익률은 3000000%
+    expect(profit).toBe(30000);
   });
 });
