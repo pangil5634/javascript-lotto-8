@@ -1,5 +1,5 @@
 import { Console } from '@woowacourse/mission-utils';
-import { IO_MESSAGES } from '../constants/index.js';
+import { IO_MESSAGES, RESULT_MESSAGES } from '../constants/index.js';
 
 class OutputView {
   static printErrorMessage(errorMessage) {
@@ -29,17 +29,9 @@ class OutputView {
   }
 
   static printDetailMatchResult(matchCountList) {
-    const resultMessages = {
-      FIFTH: '3개 일치 (5,000원)',
-      FOURTH: '4개 일치 (50,000원)',
-      THIRD: '5개 일치 (1,500,000원)',
-      SECOND: '5개 일치, 보너스 볼 일치 (30,000,000원)',
-      FIRST: '6개 일치 (2,000,000,000원)',
-    };
-
-    for (const rank in resultMessages) {
+    for (const rank in RESULT_MESSAGES) {
       const count = matchCountList[rank] || 0;
-      Console.print(`${resultMessages[rank]} - ${count}개`);
+      Console.print(`${RESULT_MESSAGES[rank]} - ${count}개`);
     }
   }
 
