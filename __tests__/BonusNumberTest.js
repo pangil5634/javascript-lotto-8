@@ -27,6 +27,6 @@ describe('LottoController run() - 보너스 번호 저장 검증', () => {
 
     // then
     expect(applySpy).toHaveBeenCalledTimes(1);
-    expect(applySpy).toHaveBeenCalledWith('7');
+    expect(applySpy).toHaveBeenCalledWith(7);
   });
 });
