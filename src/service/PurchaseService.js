@@ -11,15 +11,18 @@ class PurchaseService {
 
       const lottoMachine = new LottoMachine(purchasePrice);
 
-      OutputView.printTicketCount(lottoMachine.ticketCount);
-      OutputView.printTicketsNumbers(lottoMachine.tickets);
-      OutputView.changeLine();
-
+      this.#printTicketsInfo(lottoMachine);
       return lottoMachine;
     } catch (error) {
       OutputView.printErrorMessage(error.message);
       return await this.purchaseLottos();
     }
+  }
+
+  #printTicketsInfo(lottoMachine) {
+    OutputView.printTicketCount(lottoMachine.ticketCount);
+    OutputView.printTicketsNumbers(lottoMachine.tickets);
+    OutputView.changeLine();
   }
 }
 

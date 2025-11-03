@@ -10,18 +10,24 @@ class WinningService {
   async setWinningNumbers(lottoMachine) {
     try {
       const rawInput = await InputView.readWinningNumbers();
-      const parsedNumbers = ParseWinningNumber.parseWinningNumbers(rawInput);
-      WinningNumbersValidators.validateWinningNumbersFormat(parsedNumbers);
 
-      const winningNumbers = parsedNumbers.map(Number);
-      WinningNumbersValidators.validateParsedWinningNumbers(winningNumbers);
-
+      const winningNumbers = this.#makeWinningNumbers(rawInput);
       lottoMachine.applyWinningNumbers(winningNumbers);
       OutputView.changeLine();
     } catch (error) {
       OutputView.printErrorMessage(error.message);
       return await this.setWinningNumbers(lottoMachine);
     }
+  }
+
+  #makeWinningNumbers(rawInput) {
+    const parsedNumbers = ParseWinningNumber.parseWinningNumbers(rawInput);
+    WinningNumbersValidators.validateWinningNumbersFormat(parsedNumbers);
+
+    const winningNumbers = parsedNumbers.map(Number);
+    WinningNumbersValidators.validateParsedWinningNumbers(winningNumbers);
+
+    return winningNumbers;
   }
 
   async setBonusNumber(lottoMachine) {
