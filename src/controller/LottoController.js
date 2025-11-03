@@ -103,6 +103,10 @@ class LottoController {
   #printMatchInto() {
     // 로또 별 당첨 내역 판정하기
     this.#lottoMachine.getAllMatchCounts();
+
+    // 전체 당첨 내역 출력하기
+    const matchCountList = this.#lottoMachine.getDetailMatchResult();
+    OutputView.printDetailMatchResult(matchCountList);
   }
 }
 

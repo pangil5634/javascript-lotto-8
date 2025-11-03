@@ -120,6 +120,34 @@ class LottoMachine {
   get matchList() {
     return [...this.#matchList];
   }
+
+  getDetailMatchResult() {
+    let matchCountList = {
+      three: 0,
+      four: 0,
+      five_1: 0,
+      five_2: 0,
+      six: 0,
+    };
+    this.#matchList.forEach((match) => {
+      if (match.matchTotal === 3) {
+        matchCountList['three'] += 1;
+      }
+      if (match.matchTotal === 4) {
+        matchCountList['four'] += 1;
+      }
+      if (match.matchTotal === 5) {
+        matchCountList['five_1'] += 1;
+      }
+      if (match.matchTotal === 6 && match.matchCountWinningNumbers === 5) {
+        matchCountList['five_2'] += 1;
+      }
+      if (match.matchTotal === 6 && match.matchCountWinningNumbers === 6) {
+        matchCountList['six'] += 1;
+      }
+    });
+    return matchCountList;
+  }
 }
 
 export default LottoMachine;
