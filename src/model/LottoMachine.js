@@ -8,12 +8,12 @@ const LOTTO = {
   NUMBER_COUNT: 6,
 };
 
-const PRIZE_TABLE = {
-  three: 5000,
-  four: 50000,
-  five_1: 1500000,
-  five_2: 30000000,
-  six: 2000000000,
+const RANKS = {
+  FIRST: { matchCount: 6, prize: 2000000000, needsBonus: false },
+  SECOND: { matchCount: 5, prize: 30000000, needsBonus: true },
+  THIRD: { matchCount: 5, prize: 1500000, needsBonus: false },
+  FOURTH: { matchCount: 4, prize: 50000, needsBonus: false },
+  FIFTH: { matchCount: 3, prize: 5000, needsBonus: false },
 };
 
 class LottoMachine {
@@ -91,7 +91,6 @@ class LottoMachine {
     const matchResult = {
       matchCountWinningNumbers: matchCountWinningNumbers,
       matchCountBonusNumber: matchCountBonusNumber,
-      matchTotal: matchCountWinningNumbers + matchCountBonusNumber,
     };
     return matchResult;
   }
@@ -123,31 +122,33 @@ class LottoMachine {
   }
 
   getDetailMatchResult() {
-    let matchCountList = {
-      three: 0,
-      four: 0,
-      five_1: 0,
-      five_2: 0,
-      six: 0,
-    };
-    this.#matchList.forEach((match) => {
-      if (match.matchTotal === 3) {
-        matchCountList['three'] += 1;
+    const initialResult = Object.keys(RANKS).reduce((acc, rank) => {
+      acc[rank] = 0;
+      return acc;
+    }, {});
+
+    return this.#matchList.reduce((acc, match) => {
+      const rank = this.#getRank(match);
+      if (rank) {
+        acc[rank] += 1;
       }
-      if (match.matchTotal === 4) {
-        matchCountList['four'] += 1;
+      return acc;
+    }, initialResult);
+  }
+
+  #getRank(match) {
+    const { matchCountWinningNumbers, matchCountBonusNumber } = match;
+
+    for (const rank in RANKS) {
+      const { matchCount, needsBonus } = RANKS[rank];
+      if (matchCountWinningNumbers === matchCount) {
+        if (needsBonus) {
+          if (matchCountBonusNumber) return rank;
+          continue;
+        }
+        return rank;
       }
-      if (match.matchTotal === 5) {
-        matchCountList['five_1'] += 1;
-      }
-      if (match.matchTotal === 6 && match.matchCountWinningNumbers === 5) {
-        matchCountList['five_2'] += 1;
-      }
-      if (match.matchTotal === 6 && match.matchCountWinningNumbers === 6) {
-        matchCountList['six'] += 1;
-      }
-    });
-    return matchCountList;
+    }
   }
 
   getProfitPercentage(matchCountList) {
@@ -155,9 +156,12 @@ class LottoMachine {
   }
 
   #calculateTotalPrice(matchCountList) {
-    return Object.entries(matchCountList).reduce((total, [key, count]) => {
-      const prize = PRIZE_TABLE[key];
-      return total + prize * count;
+    return Object.entries(matchCountList).reduce((total, [rank, count]) => {
+      if (count > 0) {
+        const prize = RANKS[rank].prize;
+        return total + prize * count;
+      }
+      return total;
     }, 0);
   }
 }
