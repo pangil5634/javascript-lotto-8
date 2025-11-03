@@ -1,10 +1,11 @@
 import { ERROR_MESSAGES_INPUT } from '../constants/index.js';
 
 class BonusNumberValidators {
-  static run(bonusNumber) {
+  static run(bonusNumber, winningNumbers) {
     this.#isEmpty(bonusNumber);
     this.#isNotNumber(bonusNumber);
     this.#isInvalidRange(bonusNumber);
+    this.#isDuplicatedNumber(bonusNumber, winningNumbers);
   }
 
   static #isEmpty(bonusNumber) {
@@ -20,6 +21,12 @@ class BonusNumberValidators {
   static #isInvalidRange(bonusNumber) {
     if (Number(bonusNumber) > 45 || Number(bonusNumber) < 1)
       throw new Error(ERROR_MESSAGES_INPUT.INVALID_NUMBER_RANGE);
+  }
+
+  static #isDuplicatedNumber(bonusNumber, winningNumbers) {
+    if (winningNumbers.includes(Number(bonusNumber))) {
+      throw new Error(ERROR_MESSAGES_INPUT.EXIST_DUPLICATE_NUMBERS);
+    }
   }
 }
 

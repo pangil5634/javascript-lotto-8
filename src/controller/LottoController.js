@@ -86,7 +86,7 @@ class LottoController {
   async #readAndValidateBonusNumber() {
     try {
       const bonusNumber = await InputView.readBonusNumber();
-      BonusNumberValidators.run(bonusNumber);
+      BonusNumberValidators.run(bonusNumber, this.#lottoMachine.winningNumbers);
       this.#lottoMachine.applyBonusNumber(Number(bonusNumber));
       OutputView.changeLine();
     } catch (error) {
