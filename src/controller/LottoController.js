@@ -11,9 +11,7 @@ class LottoController {
   #lottoMachine;
 
   async run() {
-    const purchasePrice = await this.#readAndValidatePurchasePrice();
-
-    this.#lottoMachine = new LottoMachine(purchasePrice);
+    await this.#readAndValidatePurchasePrice();
 
     this.#printTicketsInfo();
 
@@ -28,7 +26,7 @@ class LottoController {
     try {
       const purchasePrice = await InputView.readPurchasePrice();
       PurchasePriceValidators.validatePurchasePrice(purchasePrice);
-      return purchasePrice;
+      this.#lottoMachine = new LottoMachine(purchasePrice);
     } catch (error) {
       OutputView.printErrorMessage(error.message);
       return await this.#readAndValidatePurchasePrice();
@@ -110,7 +108,7 @@ class LottoController {
 
     // 수익률 출력하기
     const profitPercentage =
-      this.#lottoMachine.getProfitPercentage(matchCountList) * 100;
+      this.#lottoMachine.calculateProfitPercentage(matchCountList) * 100;
     OutputView.printProfitPercentage(profitPercentage.toFixed(1));
   }
 }

@@ -18,16 +18,12 @@ class LottoMachine {
   }
 
   #createLottoTickets() {
-    for (let _ = 1; _ <= this.#ticketCount; _++) {
-      this.#createLottoTicket();
-    }
+    this.#tickets = Array.from({ length: this.#ticketCount }, () => {
+      const numbers = this.#getUniqueNumbersOfSix();
+      return new Lotto(this.#sortNumbers(numbers));
+    });
   }
 
-  #createLottoTicket() {
-    const numbers = this.#getUniqueNumbersOfSix();
-    const sortedNumbers = this.#sortNumbers(numbers);
-    this.#tickets.push(new Lotto(sortedNumbers));
-  }
   #getUniqueNumbersOfSix() {
     return Random.pickUniqueNumbersInRange(
       LOTTO.MIN_NUMBER,
@@ -98,7 +94,6 @@ class LottoMachine {
 
   #isMatchNumber(number, comparsionArray) {
     if (comparsionArray.includes(number)) return 1;
-
     return 0;
   }
 
@@ -126,28 +121,27 @@ class LottoMachine {
 
     for (const rank in RANKS) {
       const { matchCount, needsBonus } = RANKS[rank];
-      if (matchCountWinningNumbers === matchCount) {
-        if (needsBonus) {
-          if (matchCountBonusNumber) return rank;
-          continue;
-        }
-        return rank;
-      }
+      const isMatchCountEqual = matchCountWinningNumbers === matchCount;
+      const requiresBonus = needsBonus === true;
+
+      if (!isMatchCountEqual) continue;
+      if (requiresBonus && !matchCountBonusNumber) continue;
+
+      return rank;
     }
   }
 
-  getProfitPercentage(matchCountList) {
-    return this.#calculateTotalPrice(matchCountList) / this.#purchasePrice;
+  calculateProfitPercentage(matchCountList) {
+    const totalPrize = this.#calculateTotalPrize(matchCountList);
+    this.#profitPercentage = totalPrize / this.#purchasePrice;
+    return this.#profitPercentage;
   }
 
-  #calculateTotalPrice(matchCountList) {
-    return Object.entries(matchCountList).reduce((total, [rank, count]) => {
-      if (count > 0) {
-        const prize = RANKS[rank].prize;
-        return total + prize * count;
-      }
-      return total;
-    }, 0);
+  #calculateTotalPrize(matchCountList) {
+    return Object.entries(matchCountList).reduce(
+      (total, [rank, count]) => total + RANKS[rank].prize * count,
+      0,
+    );
   }
 }
 
