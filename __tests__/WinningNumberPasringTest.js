@@ -1,9 +1,9 @@
-import { ERROR_MESSAGES_INPUT } from "../src/constants";
-import LottoController from "../src/controller/LottoController";
-import ParseWinningNumber from "../src/utils/parseWinningNumber";
-import { WinningNumbersValidators } from "../src/validators";
+import { ERROR_MESSAGES_INPUT } from '../src/constants';
+import LottoController from '../src/controller/LottoController';
+import ParseWinningNumber from '../src/utils/parseWinningNumber';
+import { WinningNumbersValidators } from '../src/validators';
 
-describe("당첨 번호 입력 검증 테스트 - 에러 (캐스팅 전)", () => {
+describe('당첨 번호 입력 검증 테스트 - 에러 (캐스팅 전)', () => {
   test('공백인 경우', () => {
     const machine = new LottoController();
     const input = '';
@@ -11,7 +11,7 @@ describe("당첨 번호 입력 검증 테스트 - 에러 (캐스팅 전)", () =>
 
     expect(() => {
       WinningNumbersValidators.validateWinningNumbersFormat(parsingResult);
-    }).toThrow(ERROR_MESSAGES_INPUT.LESS_WINNING_NUMBERS);
+    }).toThrow(ERROR_MESSAGES_INPUT.INVALID_COMMA_FORMAT);
   });
 
   test('6개 미만인 경우', () => {
@@ -21,7 +21,7 @@ describe("당첨 번호 입력 검증 테스트 - 에러 (캐스팅 전)", () =>
 
     expect(() => {
       WinningNumbersValidators.validateWinningNumbersFormat(parsingResult);
-    }).toThrow(ERROR_MESSAGES_INPUT.LESS_WINNING_NUMBERS);
+    }).toThrow(ERROR_MESSAGES_INPUT.INVALID_COMMA_FORMAT);
   });
 
   test('6개 초과인 경우 (2)', () => {
@@ -31,9 +31,8 @@ describe("당첨 번호 입력 검증 테스트 - 에러 (캐스팅 전)", () =>
 
     expect(() => {
       WinningNumbersValidators.validateWinningNumbersFormat(parsingResult);
-    }).toThrow(ERROR_MESSAGES_INPUT.LESS_WINNING_NUMBERS);
+    }).toThrow(ERROR_MESSAGES_INPUT.INVALID_COMMA_FORMAT);
   });
-
 
   test('쉼표 사이 숫자가 없는 경우 (1)', () => {
     const machine = new LottoController();
@@ -62,12 +61,11 @@ describe("당첨 번호 입력 검증 테스트 - 에러 (캐스팅 전)", () =>
 
     expect(() => {
       WinningNumbersValidators.validateWinningNumbersFormat(parsingResult);
-    }).toThrow(ERROR_MESSAGES_INPUT.INCLUDE_STRING);
+    }).toThrow(ERROR_MESSAGES_INPUT.CONTAINS_NON_NUMERIC);
   });
-
 });
 
-describe("당첨 번호 입력 검증 테스트 - 에러 (캐스팅 후)", () => {
+describe('당첨 번호 입력 검증 테스트 - 에러 (캐스팅 후)', () => {
   test('1~45 범위 이외의 숫자가 존재하는 경우', () => {
     const machine = new LottoController();
     const input = '1, 2, 3, 4, 5, 100';
@@ -76,7 +74,7 @@ describe("당첨 번호 입력 검증 테스트 - 에러 (캐스팅 후)", () =>
 
     expect(() => {
       WinningNumbersValidators.validateParsedWinningNumbers(winningNumbers);
-    }).toThrow(ERROR_MESSAGES_INPUT.INVALID_NUMBER_RANGE);
+    }).toThrow(ERROR_MESSAGES_INPUT.NUMBER_OUT_OF_RANGE);
   });
 
   test('중복되는 숫자가 존재하는 경우', () => {
@@ -87,13 +85,11 @@ describe("당첨 번호 입력 검증 테스트 - 에러 (캐스팅 후)", () =>
 
     expect(() => {
       WinningNumbersValidators.validateParsedWinningNumbers(winningNumbers);
-    }).toThrow(ERROR_MESSAGES_INPUT.EXIST_DUPLICATE_NUMBERS);
+    }).toThrow(ERROR_MESSAGES_INPUT.DUPLICATE_NUMBERS_FOUND);
   });
 });
 
-
-
-describe("당첨 번호 입력 검증 테스트 - 정상", () => {
+describe('당첨 번호 입력 검증 테스트 - 정상', () => {
   test('공백 있는 경우', () => {
     const machine = new LottoController();
     const input = '1, 2, 3, 4, 5, 6';

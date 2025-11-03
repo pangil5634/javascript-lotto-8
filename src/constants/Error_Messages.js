@@ -1,14 +1,21 @@
 const ERROR_PREFIX = '[ERROR]';
 
 export const ERROR_MESSAGES_INPUT = {
-  IS_EMPTY: `${ERROR_PREFIX} The input is empty`,
-  IS_NOT_NUMBER: `${ERROR_PREFIX} The input is not a number`,
-  INVALID_LEAST_RAGE: `${ERROR_PREFIX} The input sholud be higher than 1,000`,
-  INVALID_NUMBER_DIVIDE: `${ERROR_PREFIX} The input should divide by 1,000`,
+  EMPTY_INPUT: `${ERROR_PREFIX} Input cannot be empty.`,
 
-  LESS_WINNING_NUMBERS: `${ERROR_PREFIX} The Winning Numbers should be numbers of six `,
-  INVALID_USING_COMMA: `${ERROR_PREFIX} The Comma should exit between number and number `,
-  INCLUDE_STRING: `${ERROR_PREFIX} The Winning Numbers should include only numbers`,
-  INVALID_NUMBER_RANGE: `${ERROR_PREFIX} The number is outside the range of 1 to 45.`,
-  EXIST_DUPLICATE_NUMBERS: `${ERROR_PREFIX} There are duplicated numbers`,
+  NOT_A_NUMBER: `${ERROR_PREFIX} Input must be a valid number.`,
+
+  INVALID_MINIMUM_PRICE: `${ERROR_PREFIX} Purchase amount must be at least 1,000.`,
+
+  NOT_DIVISIBLE_BY_UNIT: `${ERROR_PREFIX} Purchase amount must be a multiple of 1,000.`,
+
+  INSUFFICIENT_WINNING_NUMBERS: `${ERROR_PREFIX} Winning numbers must contain exactly six numbers.`,
+
+  INVALID_COMMA_FORMAT: `${ERROR_PREFIX} Each number should be separated by a single comma.`,
+
+  CONTAINS_NON_NUMERIC: `${ERROR_PREFIX} Winning numbers can only contain numeric values.`,
+
+  NUMBER_OUT_OF_RANGE: `${ERROR_PREFIX} Numbers must be between 1 and 45.`,
+
+  DUPLICATE_NUMBERS_FOUND: `${ERROR_PREFIX} Winning numbers must not contain duplicates.`,
 };

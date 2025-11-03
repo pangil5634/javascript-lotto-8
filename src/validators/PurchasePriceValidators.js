@@ -10,25 +10,25 @@ class PurchasePriceValidators {
 
   static #isEmpty(purchasePrice) {
     if (purchasePrice === '') {
-      throw new Error(ERROR_MESSAGES_INPUT.IS_EMPTY);
+      throw new Error(ERROR_MESSAGES_INPUT.EMPTY_INPUT);
     }
   }
 
   static #isNotNumber(purchasePrice) {
     if (isNaN(purchasePrice)) {
-      throw new Error(ERROR_MESSAGES_INPUT.IS_NOT_NUMBER);
+      throw new Error(ERROR_MESSAGES_INPUT.NOT_A_NUMBER);
     }
   }
 
   static #isZero(purchasePrice) {
     if (purchasePrice < 1000) {
-      throw new Error(ERROR_MESSAGES_INPUT.INVALID_LEAST_RAGE);
+      throw new Error(ERROR_MESSAGES_INPUT.INVALID_MINIMUM_PRICE);
     }
   }
 
   static #isDivisible(purchasePrice) {
     if (purchasePrice % 1000 !== 0) {
-      throw new Error(ERROR_MESSAGES_INPUT.INVALID_NUMBER_DIVIDE);
+      throw new Error(ERROR_MESSAGES_INPUT.NOT_DIVISIBLE_BY_UNIT);
     }
   }
 }

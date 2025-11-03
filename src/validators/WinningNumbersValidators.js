@@ -9,7 +9,7 @@ class WinningNumbersValidators {
 
   static #isLessLegth(parseWinningNumbers) {
     if (parseWinningNumbers.length !== 6) {
-      throw new Error(ERROR_MESSAGES_INPUT.LESS_WINNING_NUMBERS);
+      throw new Error(ERROR_MESSAGES_INPUT.INVALID_COMMA_FORMAT);
     }
   }
   static #isInvalidCommna(parseWinningNumbers) {
@@ -20,7 +20,8 @@ class WinningNumbersValidators {
   }
   static #isNotNumber(parseWinningNumbers) {
     const hasNonNumber = parseWinningNumbers.some((num) => isNaN(Number(num)));
-    if (hasNonNumber) throw new Error(ERROR_MESSAGES_INPUT.INCLUDE_STRING);
+    if (hasNonNumber)
+      throw new Error(ERROR_MESSAGES_INPUT.CONTAINS_NON_NUMERIC);
   }
 
   static validateParsedWinningNumbers(winningNumbers) {
@@ -31,13 +32,13 @@ class WinningNumbersValidators {
   static #isInvalidRange(winningNumbers) {
     const hasInvalidRange = winningNumbers.some((num) => num > 45 || num < 1);
     if (hasInvalidRange)
-      throw new Error(ERROR_MESSAGES_INPUT.INVALID_NUMBER_RANGE);
+      throw new Error(ERROR_MESSAGES_INPUT.NUMBER_OUT_OF_RANGE);
   }
 
   static #isDuplicateNumbers(winningNumbers) {
     const setWinningNumbers = new Set(winningNumbers);
     if (winningNumbers.length !== setWinningNumbers.size)
-      throw new Error(ERROR_MESSAGES_INPUT.EXIST_DUPLICATE_NUMBERS);
+      throw new Error(ERROR_MESSAGES_INPUT.DUPLICATE_NUMBERS_FOUND);
   }
 }
 

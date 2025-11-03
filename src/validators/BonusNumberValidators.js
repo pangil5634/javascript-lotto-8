@@ -10,22 +10,22 @@ class BonusNumberValidators {
 
   static #isEmpty(bonusNumber) {
     if (!bonusNumber || bonusNumber === '') {
-      throw new Error(ERROR_MESSAGES_INPUT.IS_EMPTY);
+      throw new Error(ERROR_MESSAGES_INPUT.EMPTY_INPUT);
     }
   }
   static #isNotNumber(bonusNumber) {
     if (isNaN(bonusNumber)) {
-      throw new Error(ERROR_MESSAGES_INPUT.IS_NOT_NUMBER);
+      throw new Error(ERROR_MESSAGES_INPUT.NOT_A_NUMBER);
     }
   }
   static #isInvalidRange(bonusNumber) {
     if (Number(bonusNumber) > 45 || Number(bonusNumber) < 1)
-      throw new Error(ERROR_MESSAGES_INPUT.INVALID_NUMBER_RANGE);
+      throw new Error(ERROR_MESSAGES_INPUT.NUMBER_OUT_OF_RANGE);
   }
 
   static #isDuplicatedNumber(bonusNumber, winningNumbers) {
     if (winningNumbers.includes(Number(bonusNumber))) {
-      throw new Error(ERROR_MESSAGES_INPUT.EXIST_DUPLICATE_NUMBERS);
+      throw new Error(ERROR_MESSAGES_INPUT.DUPLICATE_NUMBERS_FOUND);
     }
   }
 }
