@@ -8,12 +8,21 @@ const LOTTO = {
   NUMBER_COUNT: 6,
 };
 
+const PRIZE_TABLE = {
+  three: 5000,
+  four: 50000,
+  five_1: 1500000,
+  five_2: 30000000,
+  six: 2000000000,
+};
+
 class LottoMachine {
   #purchasePrice;
   #ticketCount;
   #tickets = [];
   #winningNumbers = [];
   #bonusNumber;
+  #matchList = [];
 
   constructor(purchasePrice) {
     this.#purchasePrice = purchasePrice;
@@ -67,6 +76,49 @@ class LottoMachine {
 
   applyBonusNumber(bonusNumber) {
     this.#bonusNumber = bonusNumber;
+  }
+
+  getAllMatchCounts() {
+    for (let index = 0; index < this.#ticketCount; index++) {
+      const matchResult = this.#getMatchCount(this.#tickets[index].numbers);
+      this.#matchList.push(matchResult);
+    }
+  }
+  #getMatchCount(ticket) {
+    const matchCountWinningNumbers = this.#getMatchCountWinningNumbers(ticket);
+    const matchCountBonusNumber = this.#getMatchCountBonusNumber(ticket);
+    const matchResult = {
+      matchCountWinningNumbers: matchCountWinningNumbers,
+      matchCountBonusNumber: matchCountBonusNumber,
+      matchTotal: matchCountWinningNumbers + matchCountBonusNumber,
+    };
+    return matchResult;
+  }
+
+  #getMatchCountWinningNumbers(ticket) {
+    const matchCountWinningNumbers = ticket.reduce(
+      (total, number) =>
+        (total += this.#isMatchNumber(number, this.#winningNumbers)),
+      0,
+    );
+    return matchCountWinningNumbers;
+  }
+  #getMatchCountBonusNumber(ticket) {
+    const matchCountBonusNumber = this.#isMatchNumber(
+      this.#bonusNumber,
+      ticket,
+    );
+    return matchCountBonusNumber;
+  }
+
+  #isMatchNumber(number, comparsionArray) {
+    if (comparsionArray.includes(number)) return 1;
+
+    return 0;
+  }
+
+  get matchList() {
+    return [...this.#matchList];
   }
 }
 

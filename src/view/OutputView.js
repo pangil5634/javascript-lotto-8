@@ -23,6 +23,10 @@ class OutputView {
   static #printTicket(ticket) {
     Console.print(`[${ticket.join(', ')}]`);
   }
+
+  static printResultHeader() {
+    Console.print(IO_MESSAGES.OUTPUT_RESULT_HEADER);
+  }
 }
 
 export default OutputView;

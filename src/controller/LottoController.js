@@ -20,6 +20,8 @@ class LottoController {
     await this.#readAndValidateWinningNumbers();
 
     await this.#readAndValidateBonusNumber();
+
+    this.#printResult();
   }
 
   async #readAndValidatePurchasePrice() {
@@ -85,12 +87,22 @@ class LottoController {
     try {
       const bonusNumber = await InputView.readBonusNumber();
       BonusNumberValidators.run(bonusNumber);
-      this.#lottoMachine.applyBonusNumber(bonusNumber);
+      this.#lottoMachine.applyBonusNumber(Number(bonusNumber));
       OutputView.changeLine();
     } catch (error) {
       OutputView.printErrorMessage(error.message);
       return await this.#readAndValidateBonusNumber();
     }
+  }
+
+  #printResult() {
+    OutputView.printResultHeader();
+    this.#printMatchInto();
+  }
+
+  #printMatchInto() {
+    // 로또 별 당첨 내역 판정하기
+    this.#lottoMachine.getAllMatchCounts();
   }
 }
 

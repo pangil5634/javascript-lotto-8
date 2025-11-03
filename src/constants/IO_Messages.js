@@ -4,4 +4,5 @@ export const IO_MESSAGES = {
   INPUT_BONUS_NUMBER: '보너스 번호를 입력해 주세요.\n',
 
   OUTPUT_TICKETS_NUMBERS: '개를 구매했습니다.',
+  OUTPUT_RESULT_HEADER: '당첨 통계\n---',
 };

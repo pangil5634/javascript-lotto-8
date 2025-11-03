@@ -79,3 +79,14 @@ describe('applyWinningNumbers', () => {
     expect(machine.winningNumbers).toEqual([1, 2, 3, 4, 5, 6]);
   });
 });
+
+describe('getMatchCount', () => {t
+  est('배열을 넣으면, 매칭 카운트를 구한다. ', () => {
+    // given
+    const machine = new LottoMachine(2000);
+    machine.applyWinningNumbers([1, 2, 3, 4, 5, 6]);
+
+    // then
+    expect(machine.tickets.length).toBe(2); 
+  });
+});
