@@ -23,6 +23,7 @@ class LottoMachine {
   #winningNumbers = [];
   #bonusNumber;
   #matchList = [];
+  #profitPercentage;
 
   constructor(purchasePrice) {
     this.#purchasePrice = purchasePrice;
@@ -147,6 +148,17 @@ class LottoMachine {
       }
     });
     return matchCountList;
+  }
+
+  getProfitPercentage(matchCountList) {
+    return this.#calculateTotalPrice(matchCountList) / this.#purchasePrice;
+  }
+
+  #calculateTotalPrice(matchCountList) {
+    return Object.entries(matchCountList).reduce((total, [key, count]) => {
+      const prize = PRIZE_TABLE[key];
+      return total + prize * count;
+    }, 0);
   }
 }
 

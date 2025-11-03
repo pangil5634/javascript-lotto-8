@@ -107,6 +107,11 @@ class LottoController {
     // 전체 당첨 내역 출력하기
     const matchCountList = this.#lottoMachine.getDetailMatchResult();
     OutputView.printDetailMatchResult(matchCountList);
+
+    // 수익률 출력하기
+    const profitPercentage =
+      this.#lottoMachine.getProfitPercentage(matchCountList) * 100;
+    OutputView.printProfitPercentage(profitPercentage.toFixed(1));
   }
 }
 
